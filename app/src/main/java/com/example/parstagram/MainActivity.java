@@ -100,4 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
         user.saveInBackground();
     }
+
+    private void logOut(){
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+    }
 }

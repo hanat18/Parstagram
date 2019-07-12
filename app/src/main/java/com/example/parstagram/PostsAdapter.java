@@ -60,25 +60,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Post post = posts.get(position);
         viewHolder.bind(post);
-        // populate the views according to this data
-//        viewHolder.tvDescription.setText(post.getDescription());
-//        viewHolder.tvHandle.setText(post.getUser().getUsername());
-//
-////        if(post.getImage() != null){
-////            viewHolder.tvImage.setVisibility(View.VISIBLE);
-////            Log.d("image", post.getImage().getUrl());
-////            Glide.with(context)
-////                    .load(post.getImage().getUrl())
-////                    .into(viewHolder.tvImage);
-////        }
-////        else{
-////            viewHolder.tvImage.setVisibility(View.GONE);
-////        }
-//
-//        Glide.with(context)
-//                .load(post.getImage().getUrl())
-//                .bitmapTransform(new RoundedCornersTransformation(context, 25, 0))
-//                .into(viewHolder.tvImage);
     }
 
     @Override
@@ -90,6 +71,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
         private TextView tvHandle;
         private ImageView tvImage;
         private ImageView profileImage;
+        private TextView tvTime;
         private TextView tvDescription;
 
         public ViewHolder(@NonNull View view) {
@@ -98,6 +80,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
             tvImage = view.findViewById(R.id.tvImage);
             tvDescription = view.findViewById(R.id.tvDescription);
             profileImage = view.findViewById(R.id.profileImage);
+            tvTime = view.findViewById(R.id.tvTime);
 
             view.setOnClickListener(this);
         }
@@ -117,7 +100,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
                     .placeholder(R.drawable.ic_person_black_24dp)
                     .into(profileImage);
 
-            tvDescription.setText(post.getDescription());
+            String des = "<b>" + post.getUser().getUsername() + "</b>" + "<font color=\"#808080\">" + "  " + post.getDescription();
+
+            tvDescription.setText(Html.fromHtml(des));
+            tvTime.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
         }
 
         // Handles the row being being clicked
@@ -125,24 +111,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
                 Post post = posts.get(position);
-                DialogFragment frag = new DialougFragment2();
-                Bundle args = new Bundle();
-                args.putString("username", post.getUser().getUsername());
-                Toast.makeText(context, "CLICKED: " + post.getDescription(), Toast.LENGTH_LONG).show();
-                args.putString("description", post.getDescription());
-                args.putString("imageUrl", post.getImage().getUrl());
 
                 String time = getRelativeTimeAgo(post.getCreatedAt().toString());
 
+                DialogFragment frag = new DialougFragment2();
+
+                Bundle args = new Bundle();
+
+                args.putString("username", post.getUser().getUsername());
+                args.putString("description", post.getDescription());
+                args.putString("imageUrl", post.getImage().getUrl());
                 args.putString("time", time);
-//                TODO: args.putString("createdAt", post.get)
+
                 frag.setArguments(args);
                 frag.show(((HomeActivity) context).getSupportFragmentManager(), "TAG");
-
-//                frag.show(getSupportFragmentManager(), "TAG");
-//                Post post = posts.get(position);
-//                DialogFragment dialogFragment = new DialogFragment();
-//                dialogFragment.show();
             }
         }
     }
@@ -168,12 +150,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
     // Clean all elements of the recycler
     public void clear() {
         posts.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Post> list) {
-        posts.addAll(list);
         notifyDataSetChanged();
     }
 }

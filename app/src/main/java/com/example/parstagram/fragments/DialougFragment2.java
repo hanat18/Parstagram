@@ -2,6 +2,7 @@ package com.example.parstagram.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,15 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.example.parstagram.R;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 public class DialougFragment2 extends DialogFragment {
     public TextView tvHandle;
     public ImageView tvImage;
     public TextView tvDescription;
     public TextView tvTime;
     public Button back;
+    public ImageView profileImage;
     Context context;
 
     @Nullable
@@ -34,6 +38,7 @@ public class DialougFragment2 extends DialogFragment {
         tvDescription = view.findViewById(R.id.tvDescription);
         back = view.findViewById(R.id.backButton);
         tvTime = view.findViewById(R.id.tvTime);
+        profileImage = view.findViewById(R.id.profileImage);
 
         Bundle mArgs = getArguments();
         tvHandle.setText(mArgs.getString("username"));
@@ -41,11 +46,21 @@ public class DialougFragment2 extends DialogFragment {
         String image = mArgs.getString("imageUrl");
         tvTime.setText(mArgs.getString("time"));
 
+        String des = "<b>" + mArgs.getString("username") + "</b>" + "<font color=\"#808080\">" + "  " + mArgs.getString("description");
+
+        tvDescription.setText(Html.fromHtml(des));
+
         if(image != null){
             Glide.with(context)
                     .load(image)
                     .into(tvImage);
         }
+
+        Glide.with(context)
+                .load(R.drawable.brooks)
+                .bitmapTransform(new CropCircleTransformation(context))
+                .placeholder(R.drawable.ic_person_black_24dp)
+                .into(profileImage);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

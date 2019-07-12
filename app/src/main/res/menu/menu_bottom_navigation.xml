@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_person_black_24dp"
         android:title="Profile"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_logOut"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="LogOut"
+        app:showAsAction="always" />
 </menu>

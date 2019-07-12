@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,17 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.parstagram.HomeActivity;
+
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.example.parstagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
+
 import com.parse.ParseQuery;
 
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +54,7 @@ public class PostsFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                fetchTimelineAsync(0);
+                fetchTimelineAsync();
             }
         });
         // Configure the refreshing colors
@@ -72,31 +67,15 @@ public class PostsFragment extends Fragment {
         queryPosts();
     }
 
-    public void fetchTimelineAsync(int page) {
+    public void fetchTimelineAsync() {
+        // clear data/adapter
         adapter.clear();
-//        mPosts.clear();
-        queryPosts();
+
         // ...the data has come back, add new items to your adapter...
-//        adapter.addAll(mPosts);
+        queryPosts();
+
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeContainer.setRefreshing(false);
-//        // Send the network request to fetch the updated data
-//        // `client` here is an instance of Android Async HTTP
-//        // getHomeTimeline is an example endpoint.
-//        client.getHomeTimeline(new JsonHttpResponseHandler() {
-//            public void onSuccess(JSONArray json) {
-//                // Remember to CLEAR OUT old items before appending in the new ones
-//                adapter.clear();
-//                // ...the data has come back, add new items to your adapter...
-//                adapter.addAll(...);
-//                // Now we call setRefreshing(false) to signal refresh has finished
-//                swipeContainer.setRefreshing(false);
-//            }
-//
-//            public void onFailure(Throwable e) {
-//                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
-//            }
-//        });
     }
 
     protected void queryPosts() {
@@ -104,9 +83,6 @@ public class PostsFragment extends Fragment {
         postQuery.include(Post.KEY_USER);
         postQuery.setLimit(20);
         postQuery.addDescendingOrder(Post.KEY_CREATED_AT);
-//        final Post.Query postQuery = new Post.Query();
-//        postQuery.getTop().withUser().toString();
-//        postQuery.orderByDescending("createdAt");
 
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -118,10 +94,6 @@ public class PostsFragment extends Fragment {
                 }
                 mPosts.addAll(objects);
                 adapter.notifyDataSetChanged();
-//                for (int i = 0; i < objects.size(); i++) {
-//                    Post post = objects.get(i);
-//                    Log.d("PostsFragment", "Post: " + post.getDescription() + ", username: " + post.getUser().toString());
-//                }
             }
         });
     }

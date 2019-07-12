@@ -53,8 +53,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationItemView;
 
-    public final String APP_TAG = "Parstagram";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,20 +66,17 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment = null;
                 switch (item.getItemId()) {
+                    case R.id.action_logOut:
+                        logOut();
                     case R.id.action_home:
-                        //TODO: swap fragments here
                         fragment = new PostsFragment();
-                        Toast.makeText(HomeActivity.this, "Home!", Toast.LENGTH_LONG).show();
                         break;
                     case R.id.action_compose:
                         fragment = new ComposeFragment();
-//                        Intent intent = new Intent(this, ComposeFragment.);
-                        Toast.makeText(HomeActivity.this, "Compose!", Toast.LENGTH_LONG).show();
                         break;
                     case R.id.action_profile:
                     default:
                         fragment = new ProfileFragment();
-                        Toast.makeText(HomeActivity.this, "Profile!", Toast.LENGTH_LONG).show();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
@@ -90,6 +85,12 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         bottomNavigationItemView.setSelectedItemId(R.id.action_home);
+    }
+
+    public void logOut(){
+        ParseUser.logOut();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }
