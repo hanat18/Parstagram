@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.R;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -45,6 +47,7 @@ public class DialougFragment2 extends DialogFragment {
         tvDescription.setText(mArgs.getString("description"));
         String image = mArgs.getString("imageUrl");
         tvTime.setText(mArgs.getString("time"));
+        String profileImage3 = mArgs.getString("profile");
 
         String des = "<b>" + mArgs.getString("username") + "</b>" + "<font color=\"#808080\">" + "  " + mArgs.getString("description");
 
@@ -56,11 +59,13 @@ public class DialougFragment2 extends DialogFragment {
                     .into(tvImage);
         }
 
-        Glide.with(context)
-                .load(R.drawable.brooks)
-                .bitmapTransform(new CropCircleTransformation(context))
-                .placeholder(R.drawable.ic_person_black_24dp)
-                .into(profileImage);
+        if(profileImage3 != null){
+            Glide.with(context)
+                    .load(profileImage3)
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .into(profileImage);
+        }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

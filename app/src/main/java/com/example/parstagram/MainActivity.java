@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         usernameInput = findViewById(R.id.userName);
         passwordInput = findViewById(R.id.password);
-        loginBtn = findViewById(R.id.loginButton);
+        loginBtn = findViewById(R.id.signUpButton);
         signUpBtn = findViewById(R.id.signUp);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -49,10 +49,8 @@ public class MainActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String username = usernameInput.getText().toString();
-                final String password = passwordInput.getText().toString();
-
-                signUp(username, password);
+                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -74,35 +72,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void signUp(String username, String password){
-        // Create the ParseUser
-        ParseUser user = new ParseUser();
-        // Set core properties
-        user.setUsername(username);
-        user.setPassword(password);
-
-        // Invoke signUpInBackground
-
-        //TODO: use login() instead of reusing this function?
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("signUp", "Sign Up Successful");
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        user.saveInBackground();
-    }
-
-    private void logOut(){
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
     }
 }

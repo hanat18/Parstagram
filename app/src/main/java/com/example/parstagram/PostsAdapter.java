@@ -88,17 +88,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
         public void bind(Post post){
             tvHandle.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
+            ParseFile userImage = post.getUser().getParseFile("profileImage");
             if(image != null){
                 Glide.with(context)
                         .load(image.getUrl())
                         .into(tvImage);
             }
 
-            Glide.with(context)
-                    .load(R.drawable.brooks)
-                    .bitmapTransform(new CropCircleTransformation(context))
-                    .placeholder(R.drawable.ic_person_black_24dp)
-                    .into(profileImage);
+            if(userImage != null){
+                Glide.with(context)
+                        .load(userImage.getUrl())
+                        .bitmapTransform(new CropCircleTransformation(context))
+                        .placeholder(R.drawable.ic_person_black_24dp)
+                        .into(profileImage);
+            }
 
             String des = "<b>" + post.getUser().getUsername() + "</b>" + "<font color=\"#808080\">" + "  " + post.getDescription();
 
@@ -122,6 +125,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
                 args.putString("description", post.getDescription());
                 args.putString("imageUrl", post.getImage().getUrl());
                 args.putString("time", time);
+                String profilePic = post.getUser().getParseFile("profileImage").getUrl();
+                args.putString("profile", profilePic);
 
                 frag.setArguments(args);
                 frag.show(((HomeActivity) context).getSupportFragmentManager(), "TAG");

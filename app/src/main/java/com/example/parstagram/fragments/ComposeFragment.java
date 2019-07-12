@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.parstagram.HomeActivity;
 import com.example.parstagram.R;
 import com.example.parstagram.model.Post;
 import com.parse.FindCallback;
@@ -80,6 +81,7 @@ public class ComposeFragment extends Fragment {
                 final ParseUser user = ParseUser.getCurrentUser();
 
                 createPost(description, photoFile, user);
+                loadTopPosts();
             }
         });
 
@@ -102,7 +104,6 @@ public class ComposeFragment extends Fragment {
             public void done(ParseException e) {
                 if(e == null){
                     Log.d("homeActivity", "Create Post Success");
-                    Fragment fragment = new PostsFragment();
                 }
                 else{
                     e.printStackTrace();
@@ -130,6 +131,9 @@ public class ComposeFragment extends Fragment {
                 }
             }
         });
+
+        Intent intent = new Intent(getContext(), HomeActivity.class);
+        startActivity(intent);
     }
 
     public File getPhotoFileUri(String fileName) {
