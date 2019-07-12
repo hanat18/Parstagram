@@ -35,7 +35,7 @@
     <Button
         android:id="@+id/action_logOut"
         android:layout_gravity="bottom"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#6dc993"
